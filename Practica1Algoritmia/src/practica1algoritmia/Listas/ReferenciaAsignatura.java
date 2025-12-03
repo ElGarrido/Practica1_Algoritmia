@@ -1,6 +1,7 @@
 
-package practica1algoritmia;
+package practica1algoritmia.Listas;
 
+import practica1algoritmia.Interfaces.Interface_Elemento;
 
 public class ReferenciaAsignatura implements Interface_Elemento {
     
