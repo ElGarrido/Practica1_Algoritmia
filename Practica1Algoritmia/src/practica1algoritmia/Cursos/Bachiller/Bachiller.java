@@ -14,7 +14,7 @@ import practica1algoritmia.Cursos.Curso;
  */
 public class Bachiller extends Curso{
     
-    public Bachiller(Asignatura[] asignaturas, int codi) {
+    public Bachiller(Asignatura[] asignaturas, String codi) {
         super(asignaturas, codi);
     }
     

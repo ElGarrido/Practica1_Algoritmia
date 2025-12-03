@@ -14,7 +14,7 @@ import practica1algoritmia.Cursos.Curso;
  */
 public class FP extends Curso{
     
-    public FP(Asignatura[] asignaturas, int codi) {
+    public FP(Asignatura[] asignaturas, String codi) {
         super(asignaturas, codi);
     }
     
