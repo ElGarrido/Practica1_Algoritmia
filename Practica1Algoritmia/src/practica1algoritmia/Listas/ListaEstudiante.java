@@ -1,4 +1,8 @@
-package practica1algoritmia;
+package practica1algoritmia.Listas;
+
+import practica1algoritmia.Interfaces.Interface_Lista;
+import practica1algoritmia.Interfaces.Interface_Elemento;
+import practica1algoritmia.Nodo;
 
 public class ListaEstudiante implements Interface_Lista {
 

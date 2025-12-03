@@ -1,6 +1,12 @@
 
 package practica1algoritmia;
 
+import practica1algoritmia.Interfaces.Interface_Elemento;
+import practica1algoritmia.Interfaces.Interface_Lista;
+import practica1algoritmia.Listas.ListaAsignatura;
+import practica1algoritmia.Asignaturas.Asignatura;
+import practica1algoritmia.Listas.ReferenciaAsignatura;
+
 public class Estudiante implements Interface_Elemento {
     
     private String nombre;
