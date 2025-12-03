@@ -1,5 +1,5 @@
 
-package practica1algoritmia;
+package practica1algoritmia.Asignaturas;
 
 
 public class Asignatura {

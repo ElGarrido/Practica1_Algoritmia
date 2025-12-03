@@ -1,8 +1,10 @@
 
-package practica1algoritmia;
+package practica1algoritmia.Listas;
+
+import practica1algoritmia.Interfaces.Interface_Lista;
 
 
-public class ListaCurso implements Interface_Lista {
+public class ListaEstudiante implements Interface_Lista{
 
     @Override
     public void insertar(Object elemento) {
