@@ -5,10 +5,89 @@ import practica1algoritmia.Cursos.Curso;
 import practica1algoritmia.Listas.ListaCurso;
 import practica1algoritmia.Listas.ListaEstudiante;
 
+import java.util.Scanner;
+
 public class Practica1Algoritmia {
 
+    private static Scanner sc = new Scanner(System.in);
+
+    private static void DarAltaCurso(){
+
+    }
+    private static void MatricularEstudiante(){
+
+    }
+    private static void DarBajaCurso(){
+
+    }
+    private static void DarBajaAsignatura(){
+
+    }
+    private static void ListarAsignaturasDeCurso(){
+
+    }
+    private static void ListarCursoDeAsignatura(){
+
+    }
+    private static void ListarAsignaturasDeEstudiante(){
+
+    }
 
     public static void main(String[] args) {
+
+        System.out.println("-----------------------------");
+        System.out.println("       Sistema Escolar       ");
+        System.out.println("-----------------------------");
+
+        int valorMenu = -1;
+
+        while (valorMenu != 0) {
+
+            MenuPrincipal();
+            System.out.print("Introduzca una opción: ");
+
+            try {
+                valorMenu = sc.nextInt();
+                sc.nextLine(); // Limpiar el buffer del 'Intro'
+            } catch (Exception e) {
+                sc.nextLine(); // Limpiar la entrada errónea (letras)
+                valorMenu = -1;
+                System.out.println("Error: Por favor introduzca un número válido.");
+                continue;
+            }
+
+            switch (valorMenu) {
+                case 1:
+                    DarAltaCurso();
+                    break;
+                case 2:
+                    MatricularEstudiante();
+                    break;
+                case 3:
+                    DarBajaCurso();
+                    break;
+                case 4:
+                    DarBajaAsignatura();
+                    break;
+                case 5:
+                    ListarAsignaturasDeCurso();
+                    break;
+                case 6:
+                    ListarCursoDeAsignatura();
+                    break;
+                case 7:
+                    ListarAsignaturasDeEstudiante();
+                    break;
+                case 0:
+                    break;
+                default:
+                    System.out.println("Opción no reconocida. Intente de nuevo.");
+                    break;
+            }
+        }
+        System.out.println("Adios!!");
+
+        // ---------------------------------- PRUEBAS ----------------------------------
         ListaCurso c = new ListaCurso();
         Curso test = new Curso(null,"dwadw");
         Curso test2 = new Curso(null,"dwadwd");
@@ -61,5 +140,16 @@ public class Practica1Algoritmia {
         System.out.println(busqueda);
 
     }
-    
+
+    private static void MenuPrincipal(){
+        System.out.println("\n--- MENU PRINCIPAL ---");
+        System.out.println("1. Dar de alta un Curso.");
+        System.out.println("2. Matricular un Estudiante a una Asignatura.");
+        System.out.println("3. Dar de baja un Curso.");
+        System.out.println("4. Dar de baja una Asignatura de un Curso.");
+        System.out.println("5. Listar Asignaturas de un Curso (con estudiantes).");
+        System.out.println("6. Listar Curso de una Asignatura (con estudiantes).");
+        System.out.println("7. Listar Asignaturas de un Estudiante.");
+        System.out.println("0. Salir.");
+    }
 }
