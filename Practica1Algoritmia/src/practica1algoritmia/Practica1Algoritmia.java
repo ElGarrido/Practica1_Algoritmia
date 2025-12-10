@@ -13,6 +13,7 @@ public class Practica1Algoritmia {
         Curso test = new Curso(null,"dwadw");
         Curso test2 = new Curso(null,"dwadwd");
 
+        System.out.println("PRUEBA INSERTAR UN CURSO");
         c.insertar(test);
         c.insertar(test2);
         Nodo d = c.get_Nodo();

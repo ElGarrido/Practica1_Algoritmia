@@ -16,8 +16,7 @@ public class ReferenciaEstudiante implements Interface_Elemento {
         return estudiante;
     }
 
-    // --- Implementación de Interface_Elemento ---
-    
+
     @Override
     public String getIdentificador() {
         // Devolvemos el nombre (o DNI) para que la lista de la asignatura
