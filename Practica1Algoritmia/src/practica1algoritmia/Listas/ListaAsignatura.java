@@ -6,6 +6,12 @@ import practica1algoritmia.Interfaces.Interface_Lista;
 public class ListaAsignatura implements Interface_Lista {
 
     public Asignatura[] asignaturas;
+    
+
+    public ListaAsignatura() {
+        this.asignaturas = new Asignatura[0]; 
+        
+    }
 
     @Override
     public void insertar(Object elemento) {
@@ -24,11 +30,10 @@ public class ListaAsignatura implements Interface_Lista {
                 tempas[x] = tempele;
                 modulator++;
                 done = true;
-                x --;
-                
+                x--;
 
             } else {
-                tempas[x + modulator] = asignaturas[x ];
+                tempas[x + modulator] = asignaturas[x];
             }
         }
         if (!done) {
@@ -41,54 +46,61 @@ public class ListaAsignatura implements Interface_Lista {
 
     @Override
     public void eliminar(String identificador) {
-        boolean found = false;
+        int indiceEncontrado = -1;
 
-        for (int x = 0; x < asignaturas.length; x++) {
-            if (asignaturas[x].getIdentificador() == identificador) {
+        // Buscamos si existe y dónde está
+        for (int i = 0; i < asignaturas.length; i++) {
 
-                found = true;
-
-                if (found == true) {
-                    if (x + 1 < asignaturas.length - 1) {
-                        asignaturas[x] = asignaturas[x + 1];
-                    } else {
-                        asignaturas[asignaturas.length - 1] = null;
-                    }
-                } else {
-
-                }
-
+            if (asignaturas[i].getIdentificador().equals(identificador)) {
+                indiceEncontrado = i;
+                break;
             }
         }
 
+        // Si no existe, salimos
+        if (indiceEncontrado == -1) return;
+
+        // Creamos un array más pequeño para evitar huecos con null
+        Asignatura[] temp = new Asignatura[asignaturas.length - 1];
+        
+        // Copiamos todos MENOS el que queremos borrar
+        int j = 0; // índice para el array nuevo
+        for (int i = 0; i < asignaturas.length; i++) {
+            if (i != indiceEncontrado) {
+                temp[j] = asignaturas[i];
+                j++;
+            }
+        }
+        
+        this.asignaturas = temp;
     }
 
     @Override
     public Object buscar(String identificador) {
-          for (int x = 0; x < asignaturas.length; x++) {
-            if (asignaturas[x].getIdentificador() == identificador) { 
-            return asignaturas[x];
-            
+        for (int x = 0; x < asignaturas.length; x++) {
+            if (asignaturas[x].getIdentificador().equals(identificador)) {
+                return asignaturas[x];
+
             }
-          
-          }
-          return null;
+
+        }
+        return null;
     }
 
     @Override
     public void listar() {
-                for (int x = 0; x < asignaturas.length; x++) {
-                    if (asignaturas[x] == null) {
-                    System.out.println("NULL");
-                } else {
-                    System.out.println(asignaturas[x].getIdentificador());
-                }
-                }
+        for (int x = 0; x < asignaturas.length; x++) {
+            if (asignaturas[x] == null) {
+                System.out.println("NULL");
+            } else {
+                System.out.println(asignaturas[x].getIdentificador());
+            }
+        }
     }
-    public void setAsignaturas(Asignatura[] a ){
+
+    public void setAsignaturas(Asignatura[] a) {
         this.asignaturas = a;
-        
+
     }
-    
 
 }

@@ -3,6 +3,7 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< Updated upstream
             <file>file:/C:/Users/rpere/Downloads/Taller1%20(1)/Practica1Algoritmia/src/practica1algoritmia/Interfaces/Interface_Lista.java</file>
             <file>file:/C:/Users/rpere/Downloads/Taller1%20(1)/Practica1Algoritmia/src/practica1algoritmia/Interfaces/Interface_Elemento.java</file>
             <file>file:/C:/Users/rpere/Downloads/Taller1%20(1)/Practica1Algoritmia/src/practica1algoritmia/Asignaturas/Asignatura.java</file>
@@ -22,6 +23,17 @@
             <file>file:/C:/Users/rpere/Downloads/Taller1%20(1)/Practica1Algoritmia/src/practica1algoritmia/Cursos/Bachiller/Bachiller.java</file>
             <file>file:/C:/Users/rpere/Downloads/Taller1%20(1)/Practica1Algoritmia/src/practica1algoritmia/Cursos/Bachiller/Primero.java</file>
             <file>file:/C:/Users/rpere/Downloads/Taller1%20(1)/Practica1Algoritmia/src/practica1algoritmia/Cursos/FP/Electrónica.java</file>
+=======
+            <file>file:/Users/carlosgarridodeltoro/Desktop/Practica1_Algoritmia/Practica1Algoritmia/src/practica1algoritmia/Estudiante.java</file>
+            <file>file:/Users/carlosgarridodeltoro/Desktop/Practica1_Algoritmia/Practica1Algoritmia/src/practica1algoritmia/Listas/ListaCurso.java</file>
+            <file>file:/Users/carlosgarridodeltoro/Desktop/Practica1_Algoritmia/Practica1Algoritmia/src/practica1algoritmia/Listas/ReferenciaAsignatura.java</file>
+            <file>file:/Users/carlosgarridodeltoro/Desktop/Practica1_Algoritmia/Practica1Algoritmia/src/practica1algoritmia/Listas/ListaEstudiante.java</file>
+            <file>file:/Users/carlosgarridodeltoro/Desktop/Practica1_Algoritmia/Practica1Algoritmia/src/practica1algoritmia/Listas/ListaAsignatura.java</file>
+            <file>file:/Users/carlosgarridodeltoro/Desktop/Practica1_Algoritmia/Practica1Algoritmia/src/practica1algoritmia/Nodo.java</file>
+            <file>file:/Users/carlosgarridodeltoro/Desktop/Practica1_Algoritmia/Practica1Algoritmia/src/practica1algoritmia/Listas/ReferenciaEstudiante.java</file>
+            <file>file:/Users/carlosgarridodeltoro/Desktop/Practica1_Algoritmia/Practica1Algoritmia/src/practica1algoritmia/Asignaturas/Asignatura.java</file>
+            <file>file:/Users/carlosgarridodeltoro/Desktop/Practica1_Algoritmia/Practica1Algoritmia/src/practica1algoritmia/Practica1Algoritmia.java</file>
+>>>>>>> Stashed changes
         </group>
     </open-files>
 </project-private>

@@ -1,34 +1,28 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package practica1algoritmia.Asignaturas;
 
-/**
- *
- * @author rpere
- */
+import practica1algoritmia.Cursos.Curso;
+
 public class Optativa extends Asignatura {
-
-    // Definición de los diferentes Perfiles
-    public static enum PerfilOptativa {
-        TEORICO,
-        PRACTICO
+    
+    public enum Perfil { 
+        TEORICO, 
+        PRACTICO 
     }
+    
+    private Perfil perfil;
 
-    private PerfilOptativa perfil;
-
-    public Optativa(String nombre, String identificador, PerfilOptativa perfil) {
-
-        // Constructor Padre
-        super(nombre, identificador);
-
+    public Optativa(String nombre, String identificador, Curso cursoPadre, Perfil perfil) {
+        super(nombre, identificador, cursoPadre);
         this.perfil = perfil;
     }
 
-    public PerfilOptativa getPerfil() {
-        return perfil;
+    @Override
+    public String getDescripcionExtra() {
+        return "Tipo: Optativa | Perfil: " + perfil;
     }
-
-
+    
+    @Override
+    public String toString() {
+        return "[" + identificador + "] " + nombre + " (Optativa - " + perfil + ")";
+    }
 }

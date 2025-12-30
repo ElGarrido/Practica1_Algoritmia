@@ -1,26 +1,24 @@
-
 package practica1algoritmia;
 
 import practica1algoritmia.Interfaces.Interface_Elemento;
-import practica1algoritmia.Interfaces.Interface_Lista;
-import practica1algoritmia.Listas.ListaAsignatura;
 import practica1algoritmia.Asignaturas.Asignatura;
-import practica1algoritmia.Listas.ReferenciaAsignatura;
+import practica1algoritmia.Listas.ListaRefAsig_Estud;
 
 public class Estudiante implements Interface_Elemento {
-    
+
     private String nombre;
     private String DNI;
-    
-    private Interface_Lista cursosMatriculados;
-    
-    public Estudiante (String nombre, String DNI){
+
+    public ListaRefAsig_Estud asignaturasCursadas;
+
+    public Estudiante(String nombre, String DNI) {
         this.nombre = nombre;
         this.DNI = DNI;
-        
-        this.cursosMatriculados = new ListaAsignatura();
+
+        // Lista de referencias
+        this.asignaturasCursadas = new ListaRefAsig_Estud();
     }
-    
+
     public String getNombre() {
         return nombre;
     }
@@ -28,23 +26,15 @@ public class Estudiante implements Interface_Elemento {
     public String getDni() {
         return DNI;
     }
-    
-    public void Matricular(Asignatura asignatura){
-        
-        ReferenciaAsignatura ref = new ReferenciaAsignatura(asignatura);
-        this.cursosMatriculados.insertar(ref);
-        
-    }
 
+    
     @Override
     public String getIdentificador() {
         return DNI;
     }
-    
+
     @Override
     public String toString() {
         return "Estudiante: " + nombre + " | DNI: " + DNI;
     }
-    
-    
 }

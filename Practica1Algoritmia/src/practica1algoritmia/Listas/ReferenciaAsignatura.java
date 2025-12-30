@@ -17,7 +17,6 @@ public class ReferenciaAsignatura implements Interface_Elemento {
         return asignatura;
     }
 
-    // --- Implementación de Interface_Elemento ---
     
     @Override
     public String getIdentificador() {

@@ -1,27 +1,23 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package practica1algoritmia.Asignaturas;
 
-/**
- *
- * @author rpere
- */
+import practica1algoritmia.Cursos.Curso;
+
 public class Obligatoria extends Asignatura {
+    
+    private int creditos; 
 
-    private int creditos;
-
-    public Obligatoria(String nombre, String identificador, int creditos) {
-
-        // Constructor de la clase Padre
-        // Inicializacion de los atributos que Obligatoria hereda y cumple con Interface_Elemento
-        super(nombre, identificador);
-        // Inicializa los atributos propios
+    public Obligatoria(String nombre, String identificador, Curso cursoPadre, int creditos) {
+        super(nombre, identificador, cursoPadre);
         this.creditos = creditos;
     }
 
-    public int getCreditos() {
-        return creditos;
+    @Override
+    public String getDescripcionExtra() {
+        return "Tipo: Obligatoria | Créditos: " + creditos;
+    }
+    
+    @Override
+    public String toString() {
+        return "[" + identificador + "] " + nombre + " (Obligatoria - " + creditos + " cr)";
     }
 }

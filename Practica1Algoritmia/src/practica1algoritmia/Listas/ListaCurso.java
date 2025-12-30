@@ -1,74 +1,105 @@
-
 package practica1algoritmia.Listas;
 
 import practica1algoritmia.Cursos.Curso;
 import practica1algoritmia.Interfaces.Interface_Lista;
 import practica1algoritmia.Nodo;
 
-
 public class ListaCurso implements Interface_Lista {
-    public Nodo cursos;
+    
+    private Nodo primero; 
+
+    public ListaCurso() {
+        this.primero = null;
+    }
+
     @Override
     public void insertar(Object elemento) {
-        Nodo cursos = this.cursos;
-        if (elemento == null){
-            System.err.println("Tipo de dato nulo");
+
+        if (!(elemento instanceof Curso)) {
+            System.err.println("Error: El elemento no es un Curso válido.");
             return;
         }
-        if (elemento.getClass().getName() != "practica1algoritmia.Cursos.Curso"){
-            System.err.println("Tipo de dato incorrecto");
-            return;
-            
-        }
-        System.out.println(elemento.getClass().getName());
-        if (cursos == null) {
-            this.cursos = new Nodo(elemento);
+
+        Nodo nuevoNodo = new Nodo(elemento);
+
+        // Si la lista está vacía
+        if (primero == null) {
+            this.primero = nuevoNodo;
             return;
         }
-        while (cursos.getSeg() != null) {
-            cursos = cursos.getSeg();
+
+        // Recorremos hasta el final
+        Nodo actual = primero;
+
+        while (actual.getSeg() != null) {
+            actual = actual.getSeg();
         }
-         this.cursos.setSeg(new Nodo(elemento));
-        System.out.println("Test completed");
+        
+        // Insertamos al final
+        actual.setSeg(nuevoNodo);
     }
 
     @Override
     public void eliminar(String identificador) {
-        
-        if (((Curso) cursos.getInfo()).getCodi() == identificador) {
-            this.cursos = (this.cursos.getSeg());
-             System.out.println("Elemento eliminado");
+        if (primero == null) return;
+
+        // Si es el primero
+        Curso infoPrimero = (Curso) primero.getInfo();
+
+        if (infoPrimero.getIdentificador().equals(identificador)) {
+            primero = primero.getSeg();
+            System.out.println("Curso eliminado: " + identificador);
             return;
         }
-        do {
-            if (((Curso) cursos.getSeg().getInfo()).getCodi() == identificador) {
-                if (cursos.getSeg().getSeg() != null) {
-                this.cursos.setSeg(cursos.getSeg().getSeg());
-                }else {
-                    this.cursos.setSeg(null);
-                }
-                System.out.println("Elemento eliminado");
+
+        // Si está en el resto de la lista
+        Nodo actual = primero;
+        while (actual.getSeg() != null) {
+            Curso infoSiguiente = (Curso) actual.getSeg().getInfo();
+            
+            if (infoSiguiente.getIdentificador().equals(identificador)) {
+                // Saltamos el nodo 
+                actual.setSeg(actual.getSeg().getSeg());
+                System.out.println("Curso eliminado: " + identificador);
                 return;
-                
             }
+            actual = actual.getSeg();
         }
-        while (cursos.getSeg()!= null) ;
-          
+        System.out.println("No se encontró el curso con ID: " + identificador);
     }
     
     @Override
     public Object buscar(String identificador) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+
+        Nodo actual = primero;
+        while (actual != null) {
+            Curso c = (Curso) actual.getInfo();
+
+            if (c.getIdentificador().equals(identificador)) {
+                return c; // Devolvemos el objeto Curso encontrado
+            }
+            actual = actual.getSeg();
+        }
+        return null; // No encontrado
     }
 
     @Override
     public void listar() {
-        for (int x = 0; x < ((Curso) cursos.getInfo()).getAsignaturas().length;x++) {
-            System.out.println(((Curso) cursos.getInfo()).getAsignaturas()[x]);
 
+        if (primero == null) {
+            System.out.println("No hay cursos registrados.");
+            return;
+        }
+
+        Nodo actual = primero;
+        while (actual != null) {
+
+            System.out.println(actual.getInfo()); 
+            actual = actual.getSeg();
         }
     }
-    public Nodo get_Nodo() {
-        return this.cursos;
+    
+    public Nodo getPrimero() {
+        return this.primero;
     }
 }
