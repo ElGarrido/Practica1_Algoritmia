@@ -33,7 +33,7 @@ public class Practica1Algoritmia {
         int tipo = -1;
         try {
             tipo = sc.nextInt();
-            sc.nextLine(); 
+            sc.nextLine();
         } catch (Exception e) {
             sc.nextLine();
             System.out.println("Error: Introduce un número.");
@@ -51,7 +51,7 @@ public class Practica1Algoritmia {
             System.out.println("2. Electrónica");
             System.out.println("3. Informática");
             int opcEsp = sc.nextInt();
-            sc.nextLine(); 
+            sc.nextLine();
 
             // Variable para guardar el enum seleccionado
             FP.Especialidad espSeleccionada = null;
@@ -81,10 +81,10 @@ public class Practica1Algoritmia {
             System.out.println("2. Segundo");
             int opcNiv = sc.nextInt();
             sc.nextLine();
-            
+
             Bachiller.Nivel nivSeleccionado = null;
 
-            switch (opcNiv){
+            switch (opcNiv) {
                 case 1:
                     nivSeleccionado = Bachiller.Nivel.PRIMERO;
                     break;
@@ -95,7 +95,7 @@ public class Practica1Algoritmia {
                     System.out.println("Opción incorrecta.");
                     return;
             }
-            
+
             Bachiller nuevoBach = new Bachiller(cod, nom, nivSeleccionado);
             catalogoCursos.insertar(nuevoBach);
 
@@ -165,71 +165,70 @@ public class Practica1Algoritmia {
     private static void DarBajaCurso() {
 
     }
-    
+
     private static void DarAltaAsignatura() {
-    System.out.println("\n--- NUEVA ASIGNATURA ---");
-    
-    // PRIMERO BUSCAMOS EL CURSO PADRE
-    System.out.print("Introduce el Código del Curso al que pertenece: ");
-    String idCurso = sc.nextLine();
-    
-    // Buscamos en la lista de cursos
-    Curso cursoPadre = (Curso) catalogoCursos.buscar(idCurso);
-    
-    if (cursoPadre == null) {
-        System.out.println("No existe un curso con ese código.");
-        return;
+        System.out.println("\n--- NUEVA ASIGNATURA ---");
+
+        // PRIMERO BUSCAMOS EL CURSO PADRE
+        System.out.print("Introduce el Código del Curso al que pertenece: ");
+        String idCurso = sc.nextLine();
+
+        // Buscamos en la lista de cursos
+        Curso cursoPadre = (Curso) catalogoCursos.buscar(idCurso);
+
+        if (cursoPadre == null) {
+            System.out.println("No existe un curso con ese código.");
+            return;
+        }
+        System.out.println("--> Añadiendo asignatura a: " + cursoPadre.getNombre());
+
+        // PEDIMOS DATOS 
+        System.out.print("Código Asignatura: ");
+        String cod = sc.nextLine();
+        System.out.print("Nombre Asignatura: ");
+        String nom = sc.nextLine();
+
+        // ELEGIMOS TIPO (Obligatoria vs Optativa)
+        System.out.println("Tipo de Asignatura:");
+        System.out.println("1. Obligatoria");
+        System.out.println("2. Optativa");
+        int tipo = sc.nextInt();
+        sc.nextLine(); // Buffer
+
+        Asignatura nuevaAsignatura = null;
+
+        if (tipo == 1) { // OBLIGATORIA
+            System.out.print("Número de créditos: ");
+            int creditos = sc.nextInt();
+            sc.nextLine();
+
+            // Pasamos el cursoPadre al constructor
+            nuevaAsignatura = new Obligatoria(nom, cod, cursoPadre, creditos);
+
+        } else if (tipo == 2) { // OPTATIVA
+            System.out.println("Perfil (1. TEORICO / 2. PRACTICO): ");
+            int opcPerfil = sc.nextInt();
+            sc.nextLine();
+
+            Optativa.Perfil perfil = (opcPerfil == 1) ? Optativa.Perfil.TEORICO : Optativa.Perfil.PRACTICO;
+
+            // Pasamos el cursoPadre al constructor
+            nuevaAsignatura = new Optativa(nom, cod, cursoPadre, perfil);
+
+        } else {
+            System.out.println("Tipo incorrecto.");
+            return;
+        }
+
+        // GUARDADO 
+        // La guardamos dentro del curso 
+        cursoPadre.asignaturasDelCurso.insertar(nuevaAsignatura);
+
+        // La guardamos en la lista de asignaturas 
+        catalogoAsignaturas.insertar(nuevaAsignatura);
+
+        System.out.println("Asignatura creada y vinculada correctamente.");
     }
-    System.out.println("--> Añadiendo asignatura a: " + cursoPadre.getNombre());
-
-    // PEDIMOS DATOS 
-    System.out.print("Código Asignatura: ");
-    String cod = sc.nextLine();
-    System.out.print("Nombre Asignatura: ");
-    String nom = sc.nextLine();
-
-    // ELEGIMOS TIPO (Obligatoria vs Optativa)
-    System.out.println("Tipo de Asignatura:");
-    System.out.println("1. Obligatoria");
-    System.out.println("2. Optativa");
-    int tipo = sc.nextInt();
-    sc.nextLine(); // Buffer
-
-    Asignatura nuevaAsignatura = null;
-
-    if (tipo == 1) { // OBLIGATORIA
-        System.out.print("Número de créditos: ");
-        int creditos = sc.nextInt();
-        sc.nextLine();
-        
-        // Pasamos el cursoPadre al constructor
-        nuevaAsignatura = new Obligatoria(nom, cod, cursoPadre, creditos);
-
-    } else if (tipo == 2) { // OPTATIVA
-        System.out.println("Perfil (1. TEORICO / 2. PRACTICO): ");
-        int opcPerfil = sc.nextInt();
-        sc.nextLine();
-        
-        Optativa.Perfil perfil = (opcPerfil == 1) ? Optativa.Perfil.TEORICO : Optativa.Perfil.PRACTICO;
-        
-        // Pasamos el cursoPadre al constructor
-        nuevaAsignatura = new Optativa(nom, cod, cursoPadre, perfil);
-        
-    } else {
-        System.out.println("Tipo incorrecto.");
-        return;
-    }
-
-    // GUARDADO 
-    
-    // La guardamos dentro del curso 
-    cursoPadre.asignaturasDelCurso.insertar(nuevaAsignatura);
-    
-    // La guardamos en la lista de asignaturas 
-    catalogoAsignaturas.insertar(nuevaAsignatura);
-
-    System.out.println("Asignatura creada y vinculada correctamente.");
-}
 
     private static void DarBajaAsignatura() {
 
@@ -253,10 +252,10 @@ public class Practica1Algoritmia {
 
         // 1. PRUEBA DE CURSOS (FP y Bachiller)
         System.out.println("--- 1. Creando Cursos de prueba ---");
-        
+
         // Creamos un FP usando el ENUM
         FP cursoFP = new FP("FP-INF", "1º DAM", FP.Especialidad.INFORMATICA);
-        
+
         // Creamos un Bachiller usando el ENUM
         Bachiller cursoBach = new Bachiller("BAC-1", "Humanidades", Bachiller.Nivel.PRIMERO);
 
@@ -268,10 +267,9 @@ public class Practica1Algoritmia {
         System.out.println(">> Listado de Cursos:");
         catalogoCursos.listar();
 
-
         // 2. PRUEBA DE ESTUDIANTES
         System.out.println("\n--- 2. Creando Estudiantes de prueba ---");
-        
+
         Estudiante est1 = new Estudiante("Laura Gómez", "12345678A");
         Estudiante est2 = new Estudiante("Pedro Martinez", "87654321B");
 
@@ -281,21 +279,19 @@ public class Practica1Algoritmia {
         System.out.println(">> Listado de Estudiantes:");
         catalogoEstudiantes.listar();
 
-
         // 3. PRUEBA DE BÚSQUEDA
         System.out.println("\n--- 3. Probando Búsquedas ---");
         String codigoBuscar = "FP-INF";
         Object resultado = catalogoCursos.buscar(codigoBuscar);
-        
+
         if (resultado != null) {
             // Hacemos casting a Curso porque la lista devuelve Object
-            Curso c = (Curso) resultado; 
+            Curso c = (Curso) resultado;
             System.out.println("Curso encontrado: " + c.getNombre() + " (" + c.getDescripcionTipo() + ")");
         } else {
             System.out.println("Error: No se encontró el curso.");
         }
-        
-        
+
         /*
         System.out.println("-----------------------------");
         System.out.println("       Sistema Escolar       ");
@@ -350,8 +346,7 @@ public class Practica1Algoritmia {
             }
         }
         System.out.println("Adios!!");
-        */
-        
+         */
     }
 
     private static void MenuPrincipal() {
@@ -366,4 +361,5 @@ public class Practica1Algoritmia {
         System.out.println("8. Dar de alta nuevo Estudiante");
         System.out.println("0. Salir.");
     }
+
 }
