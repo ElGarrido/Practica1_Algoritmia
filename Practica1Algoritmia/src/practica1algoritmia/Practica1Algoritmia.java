@@ -5,16 +5,9 @@ import practica1algoritmia.Cursos.Curso;
 import practica1algoritmia.Listas.ListaCurso;
 import practica1algoritmia.Cursos.Bachiller.Bachiller;
 import practica1algoritmia.Cursos.FP.FP;
-
 import practica1algoritmia.Estudiante;
-import practica1algoritmia.Listas.ListaEstudiante;
-import practica1algoritmia.Listas.ReferenciaEstudiante;
-
-import practica1algoritmia.Asignaturas.Asignatura;
-import practica1algoritmia.Listas.ListaAsignatura;
-import practica1algoritmia.Listas.ReferenciaAsignatura;
-import practica1algoritmia.Asignaturas.Obligatoria;
-import practica1algoritmia.Asignaturas.Optativa;
+import practica1algoritmia.Listas.*;
+import practica1algoritmia.Asignaturas.*;
 
 public class Practica1Algoritmia {
 
