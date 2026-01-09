@@ -30,4 +30,9 @@ public class ReferenciaAsignatura implements Interface_Elemento {
         // Cuando listes al estudiante, esto imprimirá los datos de la asignatura
         return asignatura.toString();
     }
+
+    @Override
+    public String getNombre() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }

@@ -6,4 +6,6 @@ public interface Interface_Elemento {
     String getIdentificador(); 
     
     String toString(); 
+    
+    String getNombre();
 }

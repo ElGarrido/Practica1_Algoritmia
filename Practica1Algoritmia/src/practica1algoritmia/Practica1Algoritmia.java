@@ -264,10 +264,12 @@ public class Practica1Algoritmia {
         System.out.println("\n--- 2. Creando Estudiantes de prueba ---");
 
         Estudiante est1 = new Estudiante("Laura Gómez", "12345678A");
-        Estudiante est2 = new Estudiante("Pedro Martinez", "87654321B");
+        Estudiante est2 = new Estudiante("Alba Martinez", "17654321A");
+        Estudiante est3 = new Estudiante("Alba Artinez", "87654321B");
 
         catalogoEstudiantes.insertar(est1);
         catalogoEstudiantes.insertar(est2);
+        catalogoEstudiantes.insertar(est3);
 
         System.out.println(">> Listado de Estudiantes:");
         catalogoEstudiantes.listar();

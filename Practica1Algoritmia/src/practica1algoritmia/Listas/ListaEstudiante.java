@@ -30,7 +30,7 @@ public class ListaEstudiante implements Interface_Lista {
 
         // Insertar al principio (Lista vacía o es el menor de todos)
         if (primero == null
-                || nuevoElem.getIdentificador().compareTo(((Interface_Elemento) primero.getInfo()).getIdentificador()) < 0) {
+                || nuevoElem.getNombre().compareTo(((Interface_Elemento) primero.getInfo()).getNombre()) < 0) {
             nuevoNodo.setSeg(primero);
             primero = nuevoNodo;
             return;
@@ -44,13 +44,13 @@ public class ListaEstudiante implements Interface_Lista {
             Interface_Elemento infoSiguiente = (Interface_Elemento) actual.getSeg().getInfo();
 
             // Si encontramos uno igual, es un DUPLICADO. Salimos.
-            if (infoSiguiente.getIdentificador().equals(nuevoElem.getIdentificador())) {
-                System.out.println("Error: Ya existe ID " + nuevoElem.getIdentificador());
+            if (infoSiguiente.getNombre().equals(nuevoElem.getNombre())) {
+                System.out.println("Error: Ya existe ID " + nuevoElem.getNombre());
                 return;
             }
 
             // Si el siguiente ya es mayor que el nuevo, paramos aquí
-            if (infoSiguiente.getIdentificador().compareTo(nuevoElem.getIdentificador()) > 0) {
+            if (infoSiguiente.getNombre().compareTo(nuevoElem.getNombre()) > 0) {
                 break;
             }
 
@@ -58,8 +58,8 @@ public class ListaEstudiante implements Interface_Lista {
         }
 
         // Si el duplicado era el primero 
-        if (((Interface_Elemento) primero.getInfo()).getIdentificador().equals(nuevoElem.getIdentificador())) {
-            System.out.println("Error: Ya existe ID " + nuevoElem.getIdentificador());
+        if (((Interface_Elemento) primero.getInfo()).getNombre().equals(nuevoElem.getNombre())) {
+            System.out.println("Error: Ya existe ID " + nuevoElem.getNombre());
             return;
         }
 

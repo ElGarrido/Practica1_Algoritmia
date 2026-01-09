@@ -19,6 +19,7 @@ public class Estudiante implements Interface_Elemento {
         this.asignaturasCursadas = new ListaRefAsig_Estud();
     }
 
+    @Override
     public String getNombre() {
         return nombre;
     }
