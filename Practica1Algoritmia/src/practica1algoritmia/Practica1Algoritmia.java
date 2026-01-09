@@ -2,21 +2,22 @@ package practica1algoritmia;
 
 import java.util.Scanner;
 import practica1algoritmia.Cursos.Curso;
-import practica1algoritmia.Listas.ListaCurso;
-import practica1algoritmia.Cursos.Bachiller.Bachiller;
 import practica1algoritmia.Cursos.FP.FP;
+import practica1algoritmia.Cursos.Bachiller.Bachiller;
 import practica1algoritmia.Estudiante;
-import practica1algoritmia.Listas.*;
 import practica1algoritmia.Asignaturas.*;
+import practica1algoritmia.Listas.*;
+import practica1algoritmia.Interfaces.*;
+import practica1algoritmia.Nodo;
+
+// Importamos la clase que tiene la lógica y los datos
+import practica1algoritmia.GestionarColegio;
 
 public class Practica1Algoritmia {
 
     private static Scanner sc = new Scanner(System.in);
 
-    static ListaCurso catalogoCursos = new ListaCurso();
-    static ListaEstudiante catalogoEstudiantes = new ListaEstudiante();
-    static ListaAsignatura catalogoAsignaturas = new ListaAsignatura();
-
+    // ALTAS
     private static void DarAltaCurso() {
         System.out.println("\n--- NUEVO CURSO ---");
         System.out.println("1. FP");
@@ -38,17 +39,14 @@ public class Practica1Algoritmia {
         System.out.print("Nombre: ");
         String nom = sc.nextLine();
 
+        String resultado = "";
+
         if (tipo == 1) { // ES FP
-            System.out.println("Seleccione Especialidad:");
-            System.out.println("1. Mecánica");
-            System.out.println("2. Electrónica");
-            System.out.println("3. Informática");
+            System.out.println("Especialidad: 1. Mecánica | 2. Electrónica | 3. Informática");
             int opcEsp = sc.nextInt();
             sc.nextLine();
 
-            // Variable para guardar el enum seleccionado
             FP.Especialidad espSeleccionada = null;
-
             switch (opcEsp) {
                 case 1:
                     espSeleccionada = FP.Especialidad.MECANICA;
@@ -64,19 +62,15 @@ public class Practica1Algoritmia {
                     return;
             }
 
-            // Creamos el curso con el ENUM
-            FP nuevoFP = new FP(cod, nom, espSeleccionada);
-            catalogoCursos.insertar(nuevoFP);
+            // DELEGAMOS A LA LÓGICA
+            resultado = GestionarColegio.altaCursoFP(cod, nom, espSeleccionada);
 
         } else if (tipo == 2) { // ES BACHILLER
-            System.out.println("Seleccione Nivel:");
-            System.out.println("1. Primero");
-            System.out.println("2. Segundo");
+            System.out.println("Nivel: 1. Primero | 2. Segundo");
             int opcNiv = sc.nextInt();
             sc.nextLine();
 
             Bachiller.Nivel nivSeleccionado = null;
-
             switch (opcNiv) {
                 case 1:
                     nivSeleccionado = Bachiller.Nivel.PRIMERO;
@@ -89,451 +83,204 @@ public class Practica1Algoritmia {
                     return;
             }
 
-            Bachiller nuevoBach = new Bachiller(cod, nom, nivSeleccionado);
-            catalogoCursos.insertar(nuevoBach);
+            // DELEGAMOS A LA LÓGICA
+            resultado = GestionarColegio.altaCursoBach(cod, nom, nivSeleccionado);
 
         } else {
             System.out.println("Tipo de curso no válido.");
             return;
         }
 
-        System.out.println("Curso creado correctamente.");
+        System.out.println(resultado);
     }
 
     private static void DarAltaEstudiante() {
-
         System.out.println("--- NUEVO ESTUDIANTE ---");
         System.out.print("Nombre: ");
         String nom = sc.nextLine();
         System.out.print("DNI: ");
         String dni = sc.nextLine();
 
-        Estudiante nuevo = new Estudiante(nom, dni);
-        catalogoEstudiantes.insertar(nuevo);
-        System.out.println("Estudiante registrado correctamente.");
-    }
-
-    private static void MatricularEstudiante() {
-        System.out.println("\n--- MATRICULACIÓN ---");
-
-        // Pedir DNI y Buscar Alumno
-        System.out.print("Introduce el DNI del estudiante: ");
-        String dni = sc.nextLine();
-
-        Estudiante alumnoEncontrado = (Estudiante) catalogoEstudiantes.buscar(dni);
-
-        if (alumnoEncontrado == null) {
-            System.out.println("ERROR: No existe ningún estudiante con DNI: " + dni);
-            return;
-        }
-        System.out.println("Alumno seleccionado: " + alumnoEncontrado.getNombre());
-
-        // Pedir Código y Buscar Asignatura
-        System.out.print("Introduce el ID de la asignatura: ");
-        String cod = sc.nextLine();
-
-        Asignatura asigEncontrada = (Asignatura) catalogoAsignaturas.buscar(cod);
-
-        if (asigEncontrada == null) {
-            System.out.println("ERROR: No existe asignatura con código: " + cod);
-            return;
-        }
-        System.out.println("Asignatura seleccionada: " + asigEncontrada.getNombre());
-
-        // Si ambos existen, Matriculamos al estudiante en la asignatura.
-        Matricular(alumnoEncontrado, asigEncontrada);
-    }
-
-    public static void Matricular(Estudiante est, Asignatura asig) {
-
-        ReferenciaAsignatura refAsig = new ReferenciaAsignatura(asig);
-        ReferenciaEstudiante refEst = new ReferenciaEstudiante(est);
-
-        est.asignaturasCursadas.insertar(refAsig);
-        asig.alumnosMatriculados.insertar(refEst);
-
-        System.out.println(" ÉXITO: " + est.getNombre() + " matriculado en " + asig.getNombre());
-    }
-
-    private static void DarBajaCurso() {
-        // Dar de baja un cruso, dando de baja a sus asignaturas y estudiantes asociados
-
-        System.out.println("\n--- ELIMINAR CURSO ---");
-
-        // Pedimos código del curso
-        System.out.print("Introduce el Código del Curso a eliminar: ");
-        String codi = sc.nextLine();
-
-        // Buscar el curso
-        Curso cursoEncontrado = (Curso) catalogoCursos.buscar(codi);
-
-        if (cursoEncontrado == null) {
-            System.err.println("ERROR: No se encontró ningún curso con el código: " + codi);
-            return;
-        }
-
-        System.out.println(">> Se eliminará: " + cursoEncontrado.getNombre());
-        System.out.println("   Esto borrará también todas sus asignaturas y las matrículas de los alumnos.");
-        System.out.println("¿Está seguro?");
-        System.out.println("1. Sí, eliminar todo.");
-        System.out.println("2. Cancelar.");
-        System.out.print("Opción: ");
-
-        int opcion = -1;
-        try {
-            opcion = sc.nextInt();
-            sc.nextLine(); // Limpiar buffer
-        } catch (Exception e) {
-            sc.nextLine();
-            System.out.println("Opción no válida. Cancelando.");
-            return;
-        }
-
-        if (opcion != 1) {
-            System.out.println("Operación cancelada.");
-            return;
-        }
-
-        // BORRADO EN CASCADA
-        // Obtenemos las asignaturas que pertenecen a este curso
-        ListaAsignatura asignaturasDelCurso = cursoEncontrado.asignaturasDelCurso;
-
-        // Recorremos el array de asignaturas de este curso
-        for (int i = 0; i < asignaturasDelCurso.asignaturas.length; i++) {
-
-            Asignatura asig = asignaturasDelCurso.asignaturas[i];
-
-            if (asig != null) {
-                String idAsignatura = asig.getIdentificador();
-
-                // DESMATRICULAR ESTUDIANTES
-                // Recorremos TODOS los estudiantes ver si tienen esta asignatura
-                Nodo nodoActual = catalogoEstudiantes.getPrimero();
-
-                while (nodoActual != null) {
-                    Estudiante est = (Estudiante) nodoActual.getInfo();
-
-                    // Eliminamos la asignatura del estudiante.
-                    est.asignaturasCursadas.eliminar(idAsignatura);
-
-                    nodoActual = nodoActual.getSeg();
-                }
-
-                // Eliminar la asignatura de la lista de asignaturas
-                catalogoAsignaturas.eliminar(idAsignatura);
-            }
-        }
-
-        //Eliminamos el CURSO del catálogo global
-        catalogoCursos.eliminar(codi);
-
-        System.out.println("\n --> Curso y sus datos vinculados han sido eliminados.");
+        String resultado = GestionarColegio.altaEstudiante(nom, dni);
+        System.out.println(resultado);
     }
 
     private static void DarAltaAsignatura() {
         System.out.println("\n--- NUEVA ASIGNATURA ---");
 
-        // PRIMERO BUSCAMOS EL CURSO PADRE
-        System.out.print("Introduce el Código del Curso al que pertenece: ");
+        System.out.print("Cód. Curso Padre: ");
         String idCurso = sc.nextLine();
-
-        // Buscamos en la lista de cursos
-        Curso cursoPadre = (Curso) catalogoCursos.buscar(idCurso);
-
-        if (cursoPadre == null) {
-            System.out.println("No existe un curso con ese código.");
-            return;
-        }
-        System.out.println("--> Añadiendo asignatura a: " + cursoPadre.getNombre());
-
-        // PEDIMOS DATOS 
-        System.out.print("Código Asignatura: ");
+        System.out.print("Cód. Asignatura: ");
         String cod = sc.nextLine();
-
-        // Comprobamos que no exista ya esa asignatura
-        if (catalogoAsignaturas.buscar(cod) != null) {
-            System.err.println("ERROR: Ya existe una asignatura registrada con el código '" + cod + "'.");
-            System.err.println("No se puede dar de alta dos veces la misma asignatura.");
-            return; // Salimos del método para no crear nada
-        }
-
         System.out.print("Nombre Asignatura: ");
         String nom = sc.nextLine();
 
-        // ELEGIMOS TIPO (Obligatoria vs Optativa)
-        System.out.println("Tipo de Asignatura:");
-        System.out.println("1. Obligatoria");
-        System.out.println("2. Optativa");
-        int tipo = sc.nextInt();
-        sc.nextLine(); // Buffer
+        System.out.println("Tipo: 1. Obligatoria | 2. Optativa");
+        int tipo = -1;
+        try {
+            tipo = sc.nextInt();
+            sc.nextLine();
+        } catch (Exception e) {
+            sc.nextLine();
+            System.out.println("Opción inválida.");
+            return;
+        }
 
-        Asignatura nuevaAsignatura = null;
+        String resultado = "";
 
         if (tipo == 1) { // OBLIGATORIA
-            System.out.print("Número de créditos: ");
+            System.out.print("Créditos: ");
             int creditos = sc.nextInt();
             sc.nextLine();
 
-            // Pasamos el cursoPadre al constructor
-            nuevaAsignatura = new Obligatoria(nom, cod, cursoPadre, creditos);
+            resultado = GestionarColegio.altaAsignaturaObligatoria(idCurso, cod, nom, creditos);
 
         } else if (tipo == 2) { // OPTATIVA
-            System.out.println("Perfil (1. TEORICO / 2. PRACTICO): ");
+            System.out.println("Perfil: 1. TEORICO | 2. PRACTICO");
             int opcPerfil = sc.nextInt();
             sc.nextLine();
-
             Optativa.Perfil perfil = (opcPerfil == 1) ? Optativa.Perfil.TEORICO : Optativa.Perfil.PRACTICO;
 
-            // Pasamos el cursoPadre al constructor
-            nuevaAsignatura = new Optativa(nom, cod, cursoPadre, perfil);
+            resultado = GestionarColegio.altaAsignaturaOptativa(idCurso, cod, nom, perfil);
 
         } else {
             System.out.println("Tipo incorrecto.");
             return;
         }
 
-        // GUARDADO 
-        // La guardamos dentro del curso 
-        cursoPadre.asignaturasDelCurso.insertar(nuevaAsignatura);
+        System.out.println(resultado);
+    }
 
-        // La guardamos en la lista de asignaturas 
-        catalogoAsignaturas.insertar(nuevaAsignatura);
+    private static void MatricularEstudiante() {
+        System.out.println("\n--- MATRICULACIÓN ---");
+        System.out.print("DNI del estudiante: ");
+        String dni = sc.nextLine();
+        System.out.print("ID de la asignatura: ");
+        String cod = sc.nextLine();
 
-        System.out.println("Asignatura creada y vinculada correctamente.");
+        // DELEGAMOS A LA LÓGICA
+        String resultado = GestionarColegio.matricular(dni, cod);
+        System.out.println(resultado);
+    }
+
+    private static void DarBajaCurso() {
+        System.out.println("\n--- ELIMINAR CURSO ---");
+        System.out.print("Código del Curso a eliminar: ");
+        String codi = sc.nextLine();
+
+        System.out.println("¿Está seguro? (1. Sí / 2. Cancelar)");
+        int opcion = sc.nextInt();
+        sc.nextLine();
+
+        if (opcion == 1) {
+            // DELEGAMOS A LA LÓGICA (Devuelve un log con todo lo que borró)
+            String log = GestionarColegio.bajaCursoCascada(codi);
+            System.out.println(log);
+        } else {
+            System.out.println("Cancelado.");
+        }
     }
 
     private static void DarBajaAsignatura() {
-        // Dar de baja una asignatura de un curso, dando de baja a todos los estudiantes matriculados en ella
         System.out.println("\n--- BAJA DE ASIGNATURA ---");
-
-        // Pedir Código
-        System.out.print("Introduce el Código de la Asignatura a eliminar: ");
+        System.out.print("Código de la Asignatura a eliminar: ");
         String cod = sc.nextLine();
 
-        // Buscar en el catálogo global
-        Asignatura asigToDelete = (Asignatura) catalogoAsignaturas.buscar(cod);
+        System.out.println("¿Está seguro? (1. Sí / 2. Cancelar)");
+        int opcion = sc.nextInt();
+        sc.nextLine();
 
-        if (asigToDelete == null) {
-            System.err.println("ERROR: No se encontró la asignatura con código: " + cod);
-            return;
+        if (opcion == 1) {
+            // DELEGAMOS A LA LÓGICA
+            String log = GestionarColegio.bajaAsignaturaCascada(cod);
+            System.out.println(log);
+        } else {
+            System.out.println("Cancelado.");
         }
-
-        // Confirmación
-        System.out.println(">> Se eliminará: " + asigToDelete.getNombre());
-        System.out.println("   Esto borrará también todas las matriculas de los alumnos matriculados a estas.");
-        System.out.println("¿Está seguro?");
-        System.out.println("1. Sí, eliminar todo.");
-        System.out.println("2. Cancelar.");
-        System.out.print("Opción: ");
-
-        int opcion = -1;
-        try {
-            opcion = sc.nextInt();
-            sc.nextLine();
-        } catch (Exception e) {
-            sc.nextLine();
-            return;
-        }
-
-        if (opcion != 1) {
-            System.out.println("Operación cancelada.");
-            return;
-        }
-
-        // Desmatricular a los estudiantes afectados
-        Nodo actual = asigToDelete.alumnosMatriculados.getPrimero();
-        int contAlumnos = 0;
-
-        while (actual != null) {
-            // Obtenemos el estudiante real desde la referencia
-            ReferenciaEstudiante ref = (ReferenciaEstudiante) actual.getInfo();
-            Estudiante est = ref.getEstudiante();
-
-            // Vamos al expediente del estudiante y borramos esta asignatura
-            est.asignaturasCursadas.eliminar(cod);
-
-            contAlumnos++;
-            actual = actual.getSeg();
-        }
-        System.out.println("   -> Se ha eliminado la asignatura del expediente de " + contAlumnos + " alumnos.");
-
-        // Eliminar la asignatura del Curso al que pertenece
-        Curso cursoPadre = asigToDelete.getCurso();
-        if (cursoPadre != null) {
-            // Accedemos a la lista del curso y la borramos
-            cursoPadre.asignaturasDelCurso.eliminar(cod);
-            System.out.println("   -> Eliminada de la lista del curso " + cursoPadre.getNombre());
-        }
-
-        // Eliminar de la lista Global
-        catalogoAsignaturas.eliminar(cod);
-        System.out.println("   -> Eliminada de la lista global.");
-
-        System.out.println("\n---> Asignatura eliminada correctamente.");
     }
 
+    // LISTADO
     private static void ListarAsignaturasDeCurso() {
-
-        // Dado un curso mostrar sus asignaturas junto a sus estudiantes 
-        System.out.println("\n--- LISTADO DE ASIGNATURAS Y ESTUDIANTES POR CURSO ---");
-
-        // Pedir código del curso
-        System.out.print("Introduce el Código del Curso: ");
+        System.out.println("\n--- LISTADO DE ASIGNATURAS POR CURSO ---");
+        System.out.print("Código del Curso: ");
         String codi = sc.nextLine();
 
-        // Buscar el curso en la lista global
-        // Casting a Curso
-        Curso cursoEncontrado = (Curso) catalogoCursos.buscar(codi);
+        // Usamos GestionarColegio
+        Curso curso = (Curso) GestionarColegio.catalogoCursos.buscar(codi);
 
-        if (cursoEncontrado == null) {
-            System.err.println("ERROR: No se encontró ningún curso con el código: " + codi);
+        if (curso == null) {
+            System.out.println("ERROR: No se encontró el curso.");
             return;
         }
 
-        System.out.println(">> Curso: " + cursoEncontrado.getNombre() + " (" + cursoEncontrado.getDescripcionTipo() + ")");
-        System.out.println();
+        System.out.println(">> Curso: " + curso.getNombre());
+        ListaAsignatura lista = curso.asignaturasDelCurso;
 
-        // Obtener la lista de asignaturas de ese curso
-        // Accedemos aListaAsignatura
-        ListaAsignatura listaDeAsignaturas = cursoEncontrado.asignaturasDelCurso;
-
-        boolean estaVacio = true;
-
-        // Recorremos el array de asignaturas
-        for (int i = 0; i < listaDeAsignaturas.asignaturas.length; i++) {
-
-            Asignatura asig = listaDeAsignaturas.asignaturas[i];
-
+        for (int i = 0; i < lista.asignaturas.length; i++) {
+            Asignatura asig = lista.asignaturas[i];
             if (asig != null) {
-                estaVacio = false;
-
-                // Imprimir datos de la asignatura
-                System.out.println("\n * ASIGNATURA: " + asig.getNombre() + " [Cod: " + asig.getIdentificador() + "]");
-
-                // Aquí usamos el método abstracto que implementaste para ver si es Optativa (perfil) u Obligatoria (créditos)
-                System.out.println("   |-> Detalles: " + asig.getDescripcionExtra());
-
-                System.out.print("   |-> Estudiantes matriculados: ");
-
-                // Imprimir los estudiantes
-                // Usamos el método .listar() de la lista de referencias ya que 'primero' es privado
+                System.out.println(" * " + asig.getNombre() + " (" + asig.getDescripcionExtra() + ")");
+                System.out.print("   |-> Estudiantes: ");
                 asig.alumnosMatriculados.listar();
             }
         }
-
-        if (estaVacio) {
-            System.out.println("   (Este curso no tiene asignaturas registradas todavía)");
-        }
-
         System.out.println();
     }
 
     private static void ListarCursoDeAsignatura() {
-        // Dada una asignatura mostrar a que cursos pertenece junto a sus estudiantes matricualdos
-
-        System.out.println("\n--- LISTADO DE CURSO Y ALUMNOS DE UNA ASIGNATURA ---");
-
-        // Pedir el código de la asignatura
-        System.out.print("Introduce el Código de la Asignatura: ");
+        System.out.println("\n--- INFO ASIGNATURA ---");
+        System.out.print("Código Asignatura: ");
         String codAsig = sc.nextLine();
 
-        // Buscar la asignatura en el catálogo global
-        Asignatura asigEncontrada = (Asignatura) catalogoAsignaturas.buscar(codAsig);
-
-        if (asigEncontrada == null) {
-            System.err.println("ERROR: No existe ninguna asignatura con código: " + codAsig);
+        Asignatura asig = (Asignatura) GestionarColegio.catalogoAsignaturas.buscar(codAsig);
+        if (asig == null) {
+            System.out.println("ERROR: Asignatura no encontrada.");
             return;
         }
 
-        // Obtener el curso padre 
-        Curso cursoPadre = asigEncontrada.getCurso();
+        Curso curso = asig.getCurso();
+        String nomCurso = (curso != null) ? curso.getNombre() : "Sin Curso";
 
-        String nombreCurso;
-        String tipoCurso;
-
-        // Comprobamos si existe el curso padre
-        if (cursoPadre != null) {
-            nombreCurso = cursoPadre.getNombre();
-            tipoCurso = cursoPadre.getDescripcionTipo();
-        } else {
-            nombreCurso = "Sin Curso Asignado";
-            tipoCurso = "";
-        }
-
-        // 4. Mostrar la información
-        System.out.println("\n>> INFORMACIÓN DE LA ASIGNATURA: " + asigEncontrada.getNombre());
-        System.out.println("   -------------------------------------------------");
-        System.out.println("   Pertenece al Curso: " + nombreCurso);
-        System.out.println("   Detalle del Curso:  " + tipoCurso);
-        System.out.println("   -------------------------------------------------");
-        System.out.println("   ESTUDIANTES MATRICULADOS:");
-
-        // Listar los estudiantes
-        System.out.print("   -> ");
-        asigEncontrada.alumnosMatriculados.listar();
-
-        System.out.println("   -------------------------------------------------\n");
+        System.out.println("Asignatura: " + asig.getNombre());
+        System.out.println("Pertenece a: " + nomCurso);
+        System.out.print("Estudiantes: ");
+        asig.alumnosMatriculados.listar();
+        System.out.println();
     }
 
     private static void ListarAsignaturasDeEstudiante() {
-        // Dado un estudiante mostrar todas las asignaturas a ,as que esta matriculado jutno al curso
-        System.out.println("\n--- LISTADO: ASIGNATURAS DE UN ESTUDIANTE ---");
-
-        // Pedir DNI
-        System.out.print("Introduce el DNI del estudiante: ");
+        System.out.println("\n--- EXPEDIENTE ESTUDIANTE ---");
+        System.out.print("DNI Estudiante: ");
         String dni = sc.nextLine();
 
-        // uscar estudiante
-        Estudiante alumno = (Estudiante) catalogoEstudiantes.buscar(dni);
-
+        Estudiante alumno = (Estudiante) GestionarColegio.catalogoEstudiantes.buscar(dni);
         if (alumno == null) {
-            System.err.println("ERROR: No se encontró ningún estudiante con DNI: " + dni);
+            System.out.println("ERROR: Estudiante no encontrado.");
             return;
         }
 
-        System.out.println("\n>> ESTUDIANTE: " + alumno.getNombre());
-        System.out.println("   DNI: " + alumno.getDni());
-        System.out.println("   ----------------------------------------------------------------------------------------");
-        System.out.printf("   %-20s | %-30s | %-20s\n", "ASIGNATURA", "CURSO", "TIPO");
-        System.out.println("   ----------------------------------------------------------------------------------------");
+        System.out.println("Estudiante: " + alumno.getNombre());
+        System.out.printf("   %-20s | %-20s | %-20s \n", "ASIGNATURA", "CURSO", "TIPO");
+        System.out.println("   -------------------------------------------------------");
 
-        // Recorrer la lista de asignaturas cursadas
-        // Usamos el getter que acabamos de añadir
         Nodo actual = alumno.asignaturasCursadas.getPrimero();
-        boolean tieneAsignaturas = false;
-
         while (actual != null) {
-            // Hacemos doble casting: Object -> ReferenciaAsignatura
             ReferenciaAsignatura ref = (ReferenciaAsignatura) actual.getInfo();
-
-            // Obtenemos el objeto real Asignatura
             Asignatura asig = ref.getAsignatura();
-
-            // Obtenemos el Curso al que pertenece
             Curso curso = asig.getCurso();
-
-            String nombreAsignatura = asig.getNombre();
-            String nombreCurso;
-            String tipoCurso = curso.getDescripcionTipo();
+            String nomCurso;
 
             if (curso != null) {
-                nombreCurso = curso.getNombre();
+                nomCurso = curso.getNombre();
             } else {
-                nombreCurso = "Sin Curso";
+                nomCurso = "Sin Curso";
             }
+            String tipo = curso.getDescripcionTipo();
 
-            // Imprimimos con formato alineado
-            // %-20s sirve para alinear
-            System.out.printf("   %-20s | %-30s | %-20s\n", nombreAsignatura, nombreCurso, tipoCurso);
-
-            tieneAsignaturas = true;
+            System.out.printf("   %-20s | %-20s | %-20s\n", asig.getNombre(), nomCurso, tipo);
             actual = actual.getSeg();
         }
-
-        if (!tieneAsignaturas) {
-            System.out.println("   (El estudiante no está matriculado en ninguna asignatura)");
-        }
-        System.out.println("   -----------------------------------------------------------\n");
+        System.out.println();
     }
 
     public static void main(String[] args) {
@@ -545,15 +292,14 @@ public class Practica1Algoritmia {
         int valorMenu = -1;
 
         while (valorMenu != 0) {
-
             MenuPrincipal();
             System.out.print("Introduzca una opción: ");
 
             try {
                 valorMenu = sc.nextInt();
-                sc.nextLine(); // Limpiar el buffer del 'Intro'
+                sc.nextLine();
             } catch (Exception e) {
-                sc.nextLine(); // Limpiar la entrada errónea (letras)
+                sc.nextLine();
                 valorMenu = -1;
                 System.out.println("Error: Por favor introduzca un número válido.");
                 continue;
@@ -583,18 +329,18 @@ public class Practica1Algoritmia {
                     break;
                 case 8:
                     ListarCursoDeAsignatura();
+                    break;
                 case 9:
                     ListarAsignaturasDeEstudiante();
                     break;
                 case 0:
                     break;
                 default:
-                    System.out.println("Opción no reconocida. Intente de nuevo.");
+                    System.out.println("Opción no reconocida.");
                     break;
             }
         }
         System.out.println("Adios!!");
-
     }
 
     private static void MenuPrincipal() {
@@ -605,67 +351,9 @@ public class Practica1Algoritmia {
         System.out.println("4. Matricular un Estudiante a una Asignatura.");
         System.out.println("5. Dar de baja un Curso.");
         System.out.println("6. Dar de baja una Asignatura de un Curso.");
-        System.out.println("7. Listar Asignaturas de un Curso (con estudiantes).");
-        System.out.println("8. Listar Curso de una Asignatura (con estudiantes).");
+        System.out.println("7. Listar Asignaturas de un Curso.");
+        System.out.println("8. Listar Curso de una Asignatura.");
         System.out.println("9. Listar Asignaturas de un Estudiante.");
-
         System.out.println("0. Salir.");
     }
-
-    private void PRUEBA() {
-        System.out.println("=== PRUEBA ===\n");
-
-        // 1. PRUEBA DE CURSOS (FP y Bachiller)
-        System.out.println("--- 1. Creando Cursos de prueba ---");
-
-        // Creamos un FP usando el ENUM
-        FP cursoFP = new FP("FP-INF", "1º DAM", FP.Especialidad.INFORMATICA);
-
-        // Creamos un Bachiller usando el ENUM
-        Bachiller cursoBach = new Bachiller("BAC-1", "Humanidades", Bachiller.Nivel.PRIMERO);
-
-        // Los metemos en la lista global
-        catalogoCursos.insertar(cursoFP);
-        catalogoCursos.insertar(cursoBach);
-
-        // Listamos para ver si se guardaron bien y si el toString() funciona
-        System.out.println(">> Listado de Cursos:");
-        catalogoCursos.listar();
-
-        // 2. PRUEBA DE ESTUDIANTES
-        System.out.println("\n--- 2. Creando Estudiantes de prueba ---");
-
-        Estudiante est1 = new Estudiante("Laura Gómez", "12345678A");
-        Estudiante est2 = new Estudiante("Alba Martinez", "17654321A");
-        Estudiante est3 = new Estudiante("Alba Artinez", "87654321B");
-
-        catalogoEstudiantes.insertar(est1);
-        catalogoEstudiantes.insertar(est2);
-        catalogoEstudiantes.insertar(est3);
-
-        System.out.println(">> Listado de Estudiantes:");
-        catalogoEstudiantes.listar();
-
-        // 3. PRUEBA DE BÚSQUEDA
-        System.out.println("\n--- 3. Probando Búsquedas ---");
-        String codigoBuscar = "FP-INF";
-        Object resultado = catalogoCursos.buscar(codigoBuscar);
-
-        if (resultado != null) {
-            // Hacemos casting a Curso porque la lista devuelve Object
-            Curso c = (Curso) resultado;
-            System.out.println("Curso encontrado: " + c.getNombre() + " (" + c.getDescripcionTipo() + ")");
-        } else {
-            System.out.println("Error: No se encontró el curso.");
-
-        }
-        System.out.println("\n--- 3. Añadir asignatura a curso ---");
-        System.out.println("Introduce en curso: FP-INF");
-        DarAltaAsignatura();
-
-        System.out.println("\n--- 4. Imprimir asignaturas y estudiantes por CURSO ---");
-        System.out.println("Introduce: FP-INF");
-        ListarAsignaturasDeCurso();
-    }
-
 }
