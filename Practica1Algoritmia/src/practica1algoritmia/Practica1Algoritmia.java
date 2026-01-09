@@ -303,7 +303,73 @@ public class Practica1Algoritmia {
     }
 
     private static void DarBajaAsignatura() {
-        // Dar de naja una asignatura de un curso, dando de baja a todos los estudiantes matriculados en ella
+        // Dar de baja una asignatura de un curso, dando de baja a todos los estudiantes matriculados en ella
+        System.out.println("\n--- BAJA DE ASIGNATURA ---");
+
+        // Pedir Código
+        System.out.print("Introduce el Código de la Asignatura a eliminar: ");
+        String cod = sc.nextLine();
+
+        // Buscar en el catálogo global
+        Asignatura asigToDelete = (Asignatura) catalogoAsignaturas.buscar(cod);
+
+        if (asigToDelete == null) {
+            System.err.println("ERROR: No se encontró la asignatura con código: " + cod);
+            return;
+        }
+
+        // Confirmación
+        System.out.println(">> Se eliminará: " + asigToDelete.getNombre());
+        System.out.println("   Esto borrará también todas las matriculas de los alumnos matriculados a estas.");
+        System.out.println("¿Está seguro?");
+        System.out.println("1. Sí, eliminar todo.");
+        System.out.println("2. Cancelar.");
+        System.out.print("Opción: ");
+
+        int opcion = -1;
+        try {
+            opcion = sc.nextInt();
+            sc.nextLine();
+        } catch (Exception e) {
+            sc.nextLine();
+            return;
+        }
+
+        if (opcion != 1) {
+            System.out.println("Operación cancelada.");
+            return;
+        }
+
+        // Desmatricular a los estudiantes afectados
+        Nodo actual = asigToDelete.alumnosMatriculados.getPrimero();
+        int contAlumnos = 0;
+
+        while (actual != null) {
+            // Obtenemos el estudiante real desde la referencia
+            ReferenciaEstudiante ref = (ReferenciaEstudiante) actual.getInfo();
+            Estudiante est = ref.getEstudiante();
+
+            // Vamos al expediente del estudiante y borramos esta asignatura
+            est.asignaturasCursadas.eliminar(cod);
+
+            contAlumnos++;
+            actual = actual.getSeg();
+        }
+        System.out.println("   -> Se ha eliminado la asignatura del expediente de " + contAlumnos + " alumnos.");
+
+        // Eliminar la asignatura del Curso al que pertenece
+        Curso cursoPadre = asigToDelete.getCurso();
+        if (cursoPadre != null) {
+            // Accedemos a la lista del curso y la borramos
+            cursoPadre.asignaturasDelCurso.eliminar(cod);
+            System.out.println("   -> Eliminada de la lista del curso " + cursoPadre.getNombre());
+        }
+
+        // Eliminar de la lista Global
+        catalogoAsignaturas.eliminar(cod);
+        System.out.println("   -> Eliminada de la lista global.");
+
+        System.out.println("\n---> Asignatura eliminada correctamente.");
     }
 
     private static void ListarAsignaturasDeCurso() {
@@ -427,9 +493,9 @@ public class Practica1Algoritmia {
 
         System.out.println("\n>> ESTUDIANTE: " + alumno.getNombre());
         System.out.println("   DNI: " + alumno.getDni());
-        System.out.println("   -----------------------------------------------------------");
-        System.out.printf("   %-20s | %-30s\n", "ASIGNATURA", "CURSO"); 
-        System.out.println("   -----------------------------------------------------------");
+        System.out.println("   ----------------------------------------------------------------------------------------");
+        System.out.printf("   %-20s | %-30s | %-20s\n", "ASIGNATURA", "CURSO", "TIPO");
+        System.out.println("   ----------------------------------------------------------------------------------------");
 
         // Recorrer la lista de asignaturas cursadas
         // Usamos el getter que acabamos de añadir
@@ -448,6 +514,7 @@ public class Practica1Algoritmia {
 
             String nombreAsignatura = asig.getNombre();
             String nombreCurso;
+            String tipoCurso = curso.getDescripcionTipo();
 
             if (curso != null) {
                 nombreCurso = curso.getNombre();
@@ -457,7 +524,7 @@ public class Practica1Algoritmia {
 
             // Imprimimos con formato alineado
             // %-20s sirve para alinear
-            System.out.printf("   %-20s | %-30s\n", nombreAsignatura, nombreCurso);
+            System.out.printf("   %-20s | %-30s | %-20s\n", nombreAsignatura, nombreCurso, tipoCurso);
 
             tieneAsignaturas = true;
             actual = actual.getSeg();
