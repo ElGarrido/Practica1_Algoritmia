@@ -156,7 +156,78 @@ public class Practica1Algoritmia {
     }
 
     private static void DarBajaCurso() {
+        System.out.println("\n--- ELIMINAR CURSO ---");
 
+        // Pedimos código del curso
+        System.out.print("Introduce el Código del Curso a eliminar: ");
+        String codi = sc.nextLine();
+
+        // Buscar el curso
+        Curso cursoEncontrado = (Curso) catalogoCursos.buscar(codi);
+
+        if (cursoEncontrado == null) {
+            System.err.println("ERROR: No se encontró ningún curso con el código: " + codi);
+            return;
+        }
+
+
+        System.out.println(">> Se eliminará: " + cursoEncontrado.getNombre());
+        System.out.println("   Esto borrará también todas sus asignaturas y las matrículas de los alumnos.");
+        System.out.println("¿Está seguro?");
+        System.out.println("1. Sí, eliminar todo.");
+        System.out.println("2. Cancelar.");
+        System.out.print("Opción: ");
+
+        int opcion = -1;
+        try {
+            opcion = sc.nextInt();
+            sc.nextLine(); // Limpiar buffer
+        } catch (Exception e) {
+            sc.nextLine();
+            System.out.println("Opción no válida. Cancelando.");
+            return;
+        }
+
+        if (opcion != 1) {
+            System.out.println("Operación cancelada.");
+            return;
+        }
+
+        // BORRADO EN CASCADA
+        
+        // Obtenemos las asignaturas que pertenecen a este curso
+        ListaAsignatura asignaturasDelCurso = cursoEncontrado.asignaturasDelCurso;
+
+        // Recorremos el array de asignaturas de este curso
+        for (int i = 0; i < asignaturasDelCurso.asignaturas.length; i++) {
+
+            Asignatura asig = asignaturasDelCurso.asignaturas[i];
+
+            if (asig != null) {
+                String idAsignatura = asig.getIdentificador();
+
+                // DESMATRICULAR ESTUDIANTES
+                // Recorremos TODOS los estudiantes ver si tienen esta asignatura
+                Nodo nodoActual = catalogoEstudiantes.getPrimero(); 
+
+                while (nodoActual != null) {
+                    Estudiante est = (Estudiante) nodoActual.getInfo();
+
+                    // Eliminamos la asignatura del estudiante.
+                    est.asignaturasCursadas.eliminar(idAsignatura);
+
+                    nodoActual = nodoActual.getSeg();
+                }
+
+                // Eliminar la asignatura de la lista de asignaturas
+                catalogoAsignaturas.eliminar(idAsignatura);
+            }
+        }
+
+        //Eliminamos el CURSO del catálogo global
+        catalogoCursos.eliminar(codi);
+
+        System.out.println("\n --> Curso y sus datos vinculados han sido eliminados.");
     }
 
     private static void DarAltaAsignatura() {
@@ -254,20 +325,20 @@ public class Practica1Algoritmia {
 
         // Recorremos el array de asignaturas
         for (int i = 0; i < listaDeAsignaturas.asignaturas.length; i++) {
-            
+
             Asignatura asig = listaDeAsignaturas.asignaturas[i];
 
             if (asig != null) {
                 estaVacio = false;
-                
+
                 // Imprimir datos de la asignatura
                 System.out.println("\n * ASIGNATURA: " + asig.getNombre() + " [Cod: " + asig.getIdentificador() + "]");
-                
+
                 // Aquí usamos el método abstracto que implementaste para ver si es Optativa (perfil) u Obligatoria (créditos)
                 System.out.println("   |-> Detalles: " + asig.getDescripcionExtra());
-                
+
                 System.out.print("   |-> Estudiantes matriculados: ");
-                
+
                 // Imprimir los estudiantes
                 // Usamos el método .listar() de la lista de referencias ya que 'primero' es privado
                 asig.alumnosMatriculados.listar();
@@ -277,7 +348,7 @@ public class Practica1Algoritmia {
         if (estaVacio) {
             System.out.println("   (Este curso no tiene asignaturas registradas todavía)");
         }
-        
+
         System.out.println();
     }
 
@@ -290,7 +361,7 @@ public class Practica1Algoritmia {
     }
 
     public static void main(String[] args) {
-        
+
         System.out.println("-----------------------------");
         System.out.println("       Sistema Escolar       ");
         System.out.println("-----------------------------");
@@ -347,7 +418,7 @@ public class Practica1Algoritmia {
             }
         }
         System.out.println("Adios!!");
-         
+
     }
 
     private static void MenuPrincipal() {
@@ -361,11 +432,11 @@ public class Practica1Algoritmia {
         System.out.println("7. Listar Asignaturas de un Curso (con estudiantes).");
         System.out.println("8. Listar Curso de una Asignatura (con estudiantes).");
         System.out.println("9. Listar Asignaturas de un Estudiante.");
-        
+
         System.out.println("0. Salir.");
     }
 
-    private void PRUEBA(){
+    private void PRUEBA() {
         System.out.println("=== PRUEBA ===\n");
 
         // 1. PRUEBA DE CURSOS (FP y Bachiller)
@@ -410,15 +481,15 @@ public class Practica1Algoritmia {
             System.out.println("Curso encontrado: " + c.getNombre() + " (" + c.getDescripcionTipo() + ")");
         } else {
             System.out.println("Error: No se encontró el curso.");
-            
+
         }
         System.out.println("\n--- 3. Añadir asignatura a curso ---");
         System.out.println("Introduce en curso: FP-INF");
         DarAltaAsignatura();
-        
+
         System.out.println("\n--- 4. Imprimir asignaturas y estudiantes por CURSO ---");
         System.out.println("Introduce: FP-INF");
         ListarAsignaturasDeCurso();
     }
-    
+
 }

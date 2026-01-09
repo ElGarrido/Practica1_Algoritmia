@@ -146,5 +146,9 @@ public class ListaEstudiante implements Interface_Lista {
         System.out.println("null");
 
     }
+    
+    public Nodo getPrimero() {
+        return this.primero;
+    }
 
 }
