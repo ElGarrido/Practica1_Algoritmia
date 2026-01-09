@@ -22,6 +22,10 @@ public abstract class Asignatura implements Interface_Elemento {
         this.alumnosMatriculados = new ListaRefAsig_Estud();
     }
 
+    public Curso getCurso() {
+        return this.cursoPadre;
+    }
+    
     @Override
     public String getIdentificador() {
         return identificador;

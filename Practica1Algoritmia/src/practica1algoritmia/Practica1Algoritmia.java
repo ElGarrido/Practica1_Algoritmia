@@ -170,7 +170,6 @@ public class Practica1Algoritmia {
             return;
         }
 
-
         System.out.println(">> Se eliminará: " + cursoEncontrado.getNombre());
         System.out.println("   Esto borrará también todas sus asignaturas y las matrículas de los alumnos.");
         System.out.println("¿Está seguro?");
@@ -194,7 +193,6 @@ public class Practica1Algoritmia {
         }
 
         // BORRADO EN CASCADA
-        
         // Obtenemos las asignaturas que pertenecen a este curso
         ListaAsignatura asignaturasDelCurso = cursoEncontrado.asignaturasDelCurso;
 
@@ -208,7 +206,7 @@ public class Practica1Algoritmia {
 
                 // DESMATRICULAR ESTUDIANTES
                 // Recorremos TODOS los estudiantes ver si tienen esta asignatura
-                Nodo nodoActual = catalogoEstudiantes.getPrimero(); 
+                Nodo nodoActual = catalogoEstudiantes.getPrimero();
 
                 while (nodoActual != null) {
                     Estudiante est = (Estudiante) nodoActual.getInfo();
@@ -249,6 +247,13 @@ public class Practica1Algoritmia {
         // PEDIMOS DATOS 
         System.out.print("Código Asignatura: ");
         String cod = sc.nextLine();
+        
+        if (catalogoAsignaturas.buscar(cod) != null) {
+            System.err.println("ERROR: Ya existe una asignatura registrada con el código '" + cod + "'.");
+            System.err.println("No se puede dar de alta dos veces la misma asignatura.");
+            return; // Salimos del método para no crear nada
+        }
+        
         System.out.print("Nombre Asignatura: ");
         String nom = sc.nextLine();
 
@@ -299,6 +304,8 @@ public class Practica1Algoritmia {
     }
 
     private static void ListarAsignaturasDeCurso() {
+
+        // Dado un curso mostrar sus asignaturas junto a sus estudiantes 
         System.out.println("\n--- LISTADO DE ASIGNATURAS Y ESTUDIANTES POR CURSO ---");
 
         // Pedir código del curso
@@ -353,7 +360,50 @@ public class Practica1Algoritmia {
     }
 
     private static void ListarCursoDeAsignatura() {
+        // Dada una asignatura mostrar a que cursos pertenece junto a sus estudiantes matricualdos
 
+        System.out.println("\n--- LISTADO DE CURSO Y ALUMNOS DE UNA ASIGNATURA ---");
+
+        // Pedir el código de la asignatura
+        System.out.print("Introduce el Código de la Asignatura: ");
+        String codAsig = sc.nextLine();
+
+        // Buscar la asignatura en el catálogo global
+        Asignatura asigEncontrada = (Asignatura) catalogoAsignaturas.buscar(codAsig);
+
+        if (asigEncontrada == null) {
+            System.err.println("ERROR: No existe ninguna asignatura con código: " + codAsig);
+            return;
+        }
+
+        // Obtener el curso padre 
+        Curso cursoPadre = asigEncontrada.getCurso();
+
+        String nombreCurso;
+        String tipoCurso;
+
+        // Comprobamos si existe el curso padre
+        if (cursoPadre != null) {
+            nombreCurso = cursoPadre.getNombre();
+            tipoCurso = cursoPadre.getDescripcionTipo();
+        } else {
+            nombreCurso = "Sin Curso Asignado";
+            tipoCurso = "";
+        }
+
+        // 4. Mostrar la información
+        System.out.println("\n>> INFORMACIÓN DE LA ASIGNATURA: " + asigEncontrada.getNombre());
+        System.out.println("   -------------------------------------------------");
+        System.out.println("   Pertenece al Curso: " + nombreCurso);
+        System.out.println("   Detalle del Curso:  " + tipoCurso);
+        System.out.println("   -------------------------------------------------");
+        System.out.println("   ESTUDIANTES MATRICULADOS:");
+
+        // Listar los estudiantes
+        System.out.print("   -> ");
+        asigEncontrada.alumnosMatriculados.listar();
+
+        System.out.println("   -------------------------------------------------\n");
     }
 
     private static void ListarAsignaturasDeEstudiante() {
