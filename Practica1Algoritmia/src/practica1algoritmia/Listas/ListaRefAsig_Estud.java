@@ -12,6 +12,10 @@ public class ListaRefAsig_Estud implements Interface_Lista {
     public ListaRefAsig_Estud() {
         this.primero = null;
     }
+    
+    public Nodo getPrimero() {
+        return this.primero;
+    }
 
     @Override
     public void insertar(Object elemento) {

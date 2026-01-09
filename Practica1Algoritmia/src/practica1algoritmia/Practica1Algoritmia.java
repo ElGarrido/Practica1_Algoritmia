@@ -156,6 +156,8 @@ public class Practica1Algoritmia {
     }
 
     private static void DarBajaCurso() {
+        // Dar de baja un cruso, dando de baja a sus asignaturas y estudiantes asociados
+
         System.out.println("\n--- ELIMINAR CURSO ---");
 
         // Pedimos código del curso
@@ -247,13 +249,14 @@ public class Practica1Algoritmia {
         // PEDIMOS DATOS 
         System.out.print("Código Asignatura: ");
         String cod = sc.nextLine();
-        
+
+        // Comprobamos que no exista ya esa asignatura
         if (catalogoAsignaturas.buscar(cod) != null) {
             System.err.println("ERROR: Ya existe una asignatura registrada con el código '" + cod + "'.");
             System.err.println("No se puede dar de alta dos veces la misma asignatura.");
             return; // Salimos del método para no crear nada
         }
-        
+
         System.out.print("Nombre Asignatura: ");
         String nom = sc.nextLine();
 
@@ -300,7 +303,7 @@ public class Practica1Algoritmia {
     }
 
     private static void DarBajaAsignatura() {
-
+        // Dar de naja una asignatura de un curso, dando de baja a todos los estudiantes matriculados en ella
     }
 
     private static void ListarAsignaturasDeCurso() {
@@ -407,7 +410,63 @@ public class Practica1Algoritmia {
     }
 
     private static void ListarAsignaturasDeEstudiante() {
+        // Dado un estudiante mostrar todas las asignaturas a ,as que esta matriculado jutno al curso
+        System.out.println("\n--- LISTADO: ASIGNATURAS DE UN ESTUDIANTE ---");
 
+        // Pedir DNI
+        System.out.print("Introduce el DNI del estudiante: ");
+        String dni = sc.nextLine();
+
+        // uscar estudiante
+        Estudiante alumno = (Estudiante) catalogoEstudiantes.buscar(dni);
+
+        if (alumno == null) {
+            System.err.println("ERROR: No se encontró ningún estudiante con DNI: " + dni);
+            return;
+        }
+
+        System.out.println("\n>> ESTUDIANTE: " + alumno.getNombre());
+        System.out.println("   DNI: " + alumno.getDni());
+        System.out.println("   -----------------------------------------------------------");
+        System.out.printf("   %-20s | %-30s\n", "ASIGNATURA", "CURSO"); 
+        System.out.println("   -----------------------------------------------------------");
+
+        // Recorrer la lista de asignaturas cursadas
+        // Usamos el getter que acabamos de añadir
+        Nodo actual = alumno.asignaturasCursadas.getPrimero();
+        boolean tieneAsignaturas = false;
+
+        while (actual != null) {
+            // Hacemos doble casting: Object -> ReferenciaAsignatura
+            ReferenciaAsignatura ref = (ReferenciaAsignatura) actual.getInfo();
+
+            // Obtenemos el objeto real Asignatura
+            Asignatura asig = ref.getAsignatura();
+
+            // Obtenemos el Curso al que pertenece
+            Curso curso = asig.getCurso();
+
+            String nombreAsignatura = asig.getNombre();
+            String nombreCurso;
+
+            if (curso != null) {
+                nombreCurso = curso.getNombre();
+            } else {
+                nombreCurso = "Sin Curso";
+            }
+
+            // Imprimimos con formato alineado
+            // %-20s sirve para alinear
+            System.out.printf("   %-20s | %-30s\n", nombreAsignatura, nombreCurso);
+
+            tieneAsignaturas = true;
+            actual = actual.getSeg();
+        }
+
+        if (!tieneAsignaturas) {
+            System.out.println("   (El estudiante no está matriculado en ninguna asignatura)");
+        }
+        System.out.println("   -----------------------------------------------------------\n");
     }
 
     public static void main(String[] args) {
